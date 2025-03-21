@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <link rel="stylesheet" href="style.css">
+    <div class="clock">
+        <div class="format-toggle">
+            <button id="format12" class="format-btn active">12H</button>
+            <button id="format24" class="format-btn">24H</button>
+        </div>
+        <p id="clock">00:00:00</p>
+    </div>
+    
+    <script>
+    let is24Hour = false;
+
+    function updateClock(){
+        let now = new Date();
+        let hours = now.getHours();
+        let minutes = now.getMinutes();
+        let seconds = now.getSeconds();
+        let period = '';
+        
+        if (!is24Hour) {
+            period = hours >= 12 ? ' PM' : ' AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12; // Convert 0 to 12
+        }
+        
+        hours = hours.toString().padStart(2, '0');
+        minutes = minutes.toString().padStart(2, '0');
+        seconds = seconds.toString().padStart(2, '0');
+        
+        let clock = document.getElementById('clock');
+        clock.innerHTML = hours + ":" + minutes + ":" + seconds + period;
+    }
+    
+    // Add event listeners for format buttons
+    document.getElementById('format12').addEventListener('click', function() {
+        is24Hour = false;
+        this.classList.add('active');
+        document.getElementById('format24').classList.remove('active');
+        updateClock();
+    });
+    
+    document.getElementById('format24').addEventListener('click', function() {
+        is24Hour = true;
+        this.classList.add('active');
+        document.getElementById('format12').classList.remove('active');
+        updateClock();
+    });
+    
+    updateClock();
+    setInterval(updateClock, 1000);
+    </script>
+</body>
+</html>
